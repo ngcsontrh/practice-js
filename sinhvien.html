@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý sinh viên</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form id="formSinhVien">
+        <div class="mb-3">
+          <label for="hoTen" class="form-label">Họ tên</label>
+          <input type="text" class="form-control" name="hoTen" id="hoTen" />
+        </div>
+        <div class="mb-3">
+          <label for="lop" class="form-label">Lớp</label>
+          <input type="text" class="form-control" name="lop" id="lop" />
+        </div>
+        <button type="submit" class="btn btn-primary">Thêm</button>
+      </form>
+
+      <div class="table-responsive">
+        <table class="table table-light" id="sinhVienList">
+          <thead>
+            <tr>
+              <th scope="col">Họ tên</th>
+              <th scope="col">Lớp</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    
+    <script>
+      const formSinhVien = document.getElementById("formSinhVien");
+      const sinhVienList = document.querySelector("#sinhVienList>tbody");
+
+      function renderSinhViens() {
+        sinhVienList.innerHTML = "";
+        const sinhViens = JSON.parse(localStorage.getItem("sinhViens"));
+        sinhViens.forEach((sinhVien) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                    <td scope="row">${sinhVien.hoten}</td>
+                    <td>${sinhVien.lop}</td>
+                `;
+          sinhVienList.appendChild(tr);
+        });
+      }
+
+      renderSinhViens();
+
+      formSinhVien.addEventListener("submit", function () {
+        event.preventDefault();
+        const hoten = document.getElementById("hoTen").value;
+        const lop = document.getElementById("lop").value;
+        const sinhVien = { hoten, lop };
+        if (hoten && lop) {
+          const sinhViens = JSON.parse(localStorage.getItem("sinhViens")) || [];
+          sinhViens.push(sinhVien);
+          localStorage.setItem("sinhViens", JSON.stringify(sinhViens));
+          console.log(sinhViens);
+          renderSinhViens();
+        }
+      });
+    </script>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
